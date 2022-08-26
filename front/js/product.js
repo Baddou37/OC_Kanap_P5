@@ -7,13 +7,10 @@ let basket = localStorage.getItem('basket')
 //si le panier n'est pas vide...
 if(basket) {
         basket = JSON.parse(basket)
-        console.table(basket);
         let quantityTotal =0;
         basket.forEach(element => {
             quantityTotal += element.quantity;
         });
-        //modifie le bouton ajouter en modifier
-        document.getElementById('addToCart').innerText= `Modifier le panier`;
         let productsInBasket = document.querySelectorAll("nav a li")
         //Affiche la quantité d'article dans le panier
         productsInBasket[1].innerHTML = `Panier (${quantityTotal})`;
@@ -41,13 +38,13 @@ fetch(`http://localhost:3000/api/products/${id}`)
     }
 
 
-// Return an array of the localStorage
+// Retourne le tableau du localStorage
 function getBasket(){
     let basket = localStorage.getItem('basket')
     if (basket == null){
         return [];
     }else{
-        console.log(basket)
+        // console.log(basket)
         return JSON.parse(basket)
     }
 }
@@ -67,7 +64,7 @@ function validityChoices(color, quantity) {
     }else if ( color !== '' && quantity !== 0){
         return true
     }
-    console.log(validityChoices);
+    // console.log(validityChoices);
 }
 
 //Set the item basket into the localStorage
@@ -87,16 +84,9 @@ function addBasket(product){
             alert('Votre article a été ajouté au panier')
             return
         } else {
-            if(foundProduct.quantity == product.quantity ){
-                alert('Veuillez changer la quantité ou la couleur pour modifier votre panier')
-                return
-            }else if (foundProduct.quantity !== product.quantity){
-                foundProduct.quantity += product.quantity;
-                saveBasket(basket);
-            }
+            foundProduct.quantity += product.quantity;
+            saveBasket(basket);
         }
-    }else{
-        return
     }
 }
 
@@ -108,6 +98,8 @@ document.getElementById('addToCart').addEventListener('click', (event) => {
         color : document.getElementById('colors').value,
         quantity : parseInt(document.getElementById('quantity').value)
     };
+    //appel de la fonction qui ajoute l'object au tableau du localStorage
     addBasket(product)
+    //appel de la fonction qui affiche la quantité dans le panier en haut de la page au moment du clic
     diplayBasketTop()
 });
