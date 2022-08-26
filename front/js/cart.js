@@ -25,7 +25,7 @@ function getBasket(){
 }
 
 // éléments à afficher
-{/* <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
+/* <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
 <div class="cart__item__img">
   <img src="../images/product01.jpg" alt="Photographie d'un canapé">
 </div>
@@ -45,4 +45,4 @@ function getBasket(){
     </div>
   </div>
 </div>
-</article> */}
+</article> */
