@@ -149,6 +149,7 @@ function validityQuantity(quantity) {
     return true
   }
 }
+ 
 
 function lisibilite_nombre(nbr)
 {
