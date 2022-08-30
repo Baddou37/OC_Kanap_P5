@@ -29,6 +29,7 @@ fetch(`http://localhost:3000/api/products/${id}`)
     });
     
     function product(data) {
+        data.price = lisibilite_nombre(data.price)
         document.querySelector(".item__img").insertAdjacentHTML("afterbegin", `<img src="${data.imageUrl}" alt="${data.altTxt}">`);
         document.querySelector("#title").insertAdjacentHTML("afterbegin", data.name);
         document.querySelector("#price").insertAdjacentHTML("afterbegin", data.price);
@@ -85,6 +86,7 @@ function addBasket(product){
             return
         } else {
             foundProduct.quantity += product.quantity;
+            alert('Ajout de la quantité à votre panier')
             saveBasket(basket);
         }
     }
@@ -103,3 +105,19 @@ document.getElementById('addToCart').addEventListener('click', (event) => {
     //appel de la fonction qui affiche la quantité dans le panier en haut de la page au moment du clic
     diplayBasketTop()
 });
+
+function lisibilite_nombre(nbr)
+{
+		var nombre = ''+nbr;
+		var retour = '';
+		var count=0;
+		for(var i=nombre.length-1 ; i>=0 ; i--)
+		{
+			if(count!=0 && count % 3 == 0)
+				retour = nombre[i]+' '+retour ;
+			else
+				retour = nombre[i]+retour ;
+			count++;
+		}
+		return retour;
+}
