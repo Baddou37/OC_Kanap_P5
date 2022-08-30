@@ -141,6 +141,8 @@ function updateProduct() {
   }
 }
 
+
+
 function validityQuantity(quantity) {
   if(quantity < 0) {
     return false
