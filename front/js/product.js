@@ -50,6 +50,10 @@ function getBasket(){
     }
 }
 
+//Set the item basket into the localStorage
+function saveBasket(basket){
+    localStorage.setItem("basket", JSON.stringify(basket))
+}
 
 // Save the current item in the local Storage
 function validityChoices(color, quantity) {
@@ -68,10 +72,6 @@ function validityChoices(color, quantity) {
     // console.log(validityChoices);
 }
 
-//Set the item basket into the localStorage
-function saveBasket(basket){
-    localStorage.setItem("basket", JSON.stringify(basket))
-}
 
 // add the product to the local Storage
 function addBasket(product){

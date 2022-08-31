@@ -1,17 +1,18 @@
-//Appel le panier
-let basket = localStorage.getItem('basket')
-//si le panier n'est pas vide...
-if(basket) {
-    basket = JSON.parse(basket)
-    console.table(basket);
-    let quantityTotal =0;
-    basket.forEach(element => {
-        quantityTotal += element.quantity;
-    });
-    let productsInBasket = document.querySelectorAll("nav a li")
-    //Affiche la quantité d'article dans le panier
-    productsInBasket[1].innerHTML = `Panier (${quantityTotal})`;
-}
+function diplayBasketTop() {
+  let basket = localStorage.getItem('basket')
+  //si le panier n'est pas vide...
+  if(basket) {
+          basket = JSON.parse(basket)
+          let quantityTotal =0;
+          basket.forEach(element => {
+              quantityTotal += element.quantity;
+          });
+          let productsInBasket = document.querySelectorAll("nav a li")
+          //Affiche la quantité d'article dans le panier
+          productsInBasket[1].innerHTML = `Panier (${quantityTotal})`;
+      }
+  }
+  diplayBasketTop()
 
 // Retourne le tableau du localStorage
 function getBasket(){
@@ -127,31 +128,28 @@ function updateProduct() {
   const quantity = document.querySelectorAll('.itemQuantity')
     for(let updateQuantity of quantity) {
       updateQuantity.addEventListener('change', (eq) => {
-      //récupéré id et couleur via dataset
-      let article = updateQuantity.closest('article')
-      for(product of basket) {
+        console.log(updateQuantity.value);
+        if(updateQuantity.value > 0){ 
+        //récupéré id et couleur via dataset
+        let article = updateQuantity.closest('article')
+        console.log(article.dataset.quantité);
+        for(product of basket) {
         if(product._id === article.dataset.id && article.dataset.color === product.color) {
           product.quantity = parseInt(eq.target.value);
           localStorage.basket = JSON.stringify(basket);
-          article.dataset.quantity = parseInt(eq.target.value)
+          article.dataset.quantité = parseInt(eq.target.value)
           totalProduit();
+          diplayBasketTop()
         }
+      }} else {
+        alert('Vous ne pouvez pas selectionné une quantité négative, veuillez choisir une nouvelle quantité')
+        let article = updateQuantity.closest('article')
+        updateQuantity.value = article.dataset.quantité
+        console.log(article.dataset.value);
       }
     })
   }
 }
-
-
-
-function validityQuantity(quantity) {
-  if(quantity < 0) {
-    return false
-    alert('Vous ne pouvez pas selectionné une quantité négative')
-  } else {
-    return true
-  }
-}
- 
 
 function lisibilite_nombre(nbr)
 {
