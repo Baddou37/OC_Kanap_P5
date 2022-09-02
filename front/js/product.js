@@ -79,7 +79,6 @@ function addBasket(product){
     if ( checkUserChoices == true ){
         let basket = getBasket();
         let foundProduct = basket.find(p => p._id == product._id && p.color == product.color)
-        console.log(foundProduct);
         if (foundProduct == undefined){
             basket.push(product);
             saveBasket(basket);
@@ -101,7 +100,6 @@ document.getElementById('addToCart').addEventListener('click', (event) => {
         color : document.getElementById('colors').value,
         quantity : parseInt(document.getElementById('quantity').value)
     };
-    console.log(product);
     //appel de la fonction qui ajoute l'object au tableau du localStorage
     addBasket(product)
     //appel de la fonction qui affiche la quantité dans le panier en haut de la page au moment du clic

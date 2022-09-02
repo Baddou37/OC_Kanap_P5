@@ -153,17 +153,14 @@ function deleteProduct() {
     click.addEventListener('click', (ec) => {
       if (window.confirm('Voulez vous supprimer cet article?')) {
         let article = click.closest('article')
-        console.table(basket);
+        console.log("1", basket.length);
+        article.remove();
         for (let i = 0, b = basket.length; i < b; i++) {
-          if (basket[i]._id === article.dataset.id && basket[i].color === article.dataset.color) {
-            article.remove();
-            console.log(article);
-            let foundProduct = basket.find(p => p._id == article.dataset.id && p.color == article.dataset.color)
-            console.log(foundProduct);
-            basket = basket.filter(p => p != foundProduct);
-            console.table(basket);
-            localStorage.basket = JSON.stringify(basket);
-          }
+          console.log("2", basket.length);
+          let foundProduct = basket.find(p => p._id == article.dataset.id && p.color == article.dataset.color)
+          basket = basket.filter(p => p != foundProduct);
+          console.log("3", basket.length);
+          localStorage.basket = JSON.stringify(basket);
           totalProduit();
           diplayBasketTop()
         }
@@ -186,4 +183,69 @@ function lisibilite_nombre(nbr)
 			count++;
 		}
 		return retour;
+}
+
+
+/**************
+FORM
+***************/
+
+// initialisation de l'objet contact
+let contact = {
+  firstName: '',
+  lastName: '',
+  address: '',
+  city: '',
+  email: ''
+}
+
+console.log(contact);
+
+// Stock si les inputs sont valides ou non
+let isValidInputs = {
+  firstName: false,
+  lastName: false,
+  address: false,
+  city: false,
+  email: false
+}
+// définitions des différentes RegExp dans une constante
+const regExpList = {
+  firstName: new RegExp('(^[a-zA-Zéè -]{2,20}$)'),
+  lastName: new RegExp('(^[a-zA-Z -]{2,30}$)'),
+  address: new RegExp('(^[a-zA-Zéè 0-9,-]{4,50}$)'),
+  city: new RegExp('(^[a-zA-Zàéè -]{4,30}$)'),
+  email: /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
+}
+
+// Vérifier les inputs et les stocker
+function checkUserInformations(input, regex, id) {
+
+  if (regex.test(input.value)) {
+      input.style.border = '2px solid Green';
+      document.getElementById(`${id}ErrorMsg`).innerText = '';
+      contact[id] = input.value;
+      isValidInputs[id] = true;
+  } else {
+      input.style.border = '2px solid Red';
+      isValidInputs[id] = false;
+      if (id == "firstName" || id == "lastName") {
+          document.getElementById(`${id}ErrorMsg`).innerText = 'Le format renseignée n\'est pas valide (ex : "Julien")';
+      } else if (id == 'email') {
+          document.getElementById(`${id}ErrorMsg`).innerText = 'Le format renseignée n\'est pas valide (ex: " johndoe@aol.com ") ';
+      } else {
+          document.getElementById(`${id}ErrorMsg`).innerText = 'L\'information renseignée n\'est pas valide';
+      }
+  }
+}
+
+// Appel la fonction de validité et de stockage des inputs à l'aide d'une boucle
+for (let input of document.querySelector('.cart__order__form')) {
+  if (input.type == "text" || input.type == "email") {
+      input.addEventListener('change', (e) => {
+          checkUserInformations(e.target, regExpList[e.target.id], e.target.id);
+          console.log(contact);
+          console.log(isValidInputs);
+      })
+  }
 }
