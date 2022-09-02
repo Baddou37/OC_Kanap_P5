@@ -57,19 +57,19 @@ function saveBasket(basket){
 
 // Save the current item in the local Storage
 function validityChoices(color, quantity) {
-    if ( color == '' && quantity == 0 ){
-        alert('Vous n\'avez pas sélectionné une couleur ni une quantité');
+    if ( color == '' && (quantity <= 0 || quantity > 100)){
+        alert('Vous n\'avez pas sélectionné une couleur et une quantité valide');
+        console.log(color);
         return false
-    }else if(color !== '' && quantity == 0 || quantity < 0){
-        alert('Vous n\'avez pas sélectionné une quantité');
+    } else if ( color !== '' && (quantity <= 0 || quantity > 100)){
+        alert('Vous n\'avez pas sélectionné une quantité ou la quantité selectionnée n\'est pas valide');
         return false
-    }else if (color == '' && quantity !== 0){
+    } else if (color == '' && quantity !== 0){
         alert('Vous n\'avez pas sélectionné une couleur');
         return false
-    }else if ( color !== '' && quantity !== 0){
+    } else if ( color !== '' && quantity !== 0){
         return true
     }
-    // console.log(validityChoices);
 }
 
 
@@ -78,7 +78,8 @@ function addBasket(product){
     let checkUserChoices = validityChoices(product.color, product.quantity);
     if ( checkUserChoices == true ){
         let basket = getBasket();
-        let foundProduct = basket.find(p => p.id == product.id && p.color == product.color)
+        let foundProduct = basket.find(p => p._id == product._id && p.color == product.color)
+        console.log(foundProduct);
         if (foundProduct == undefined){
             basket.push(product);
             saveBasket(basket);
@@ -100,6 +101,7 @@ document.getElementById('addToCart').addEventListener('click', (event) => {
         color : document.getElementById('colors').value,
         quantity : parseInt(document.getElementById('quantity').value)
     };
+    console.log(product);
     //appel de la fonction qui ajoute l'object au tableau du localStorage
     addBasket(product)
     //appel de la fonction qui affiche la quantité dans le panier en haut de la page au moment du clic

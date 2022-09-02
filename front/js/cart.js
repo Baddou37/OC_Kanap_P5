@@ -46,10 +46,10 @@ fetch("http://localhost:3000/api/products")
 
     // dans le cas d'une erreur remplace le contenu de titre par un h1 
     // au contenu de erreur 404 et renvoit en console l'erreur.
-    .catch((err) => {
-        document.querySelector(".titles").innerHTML = "<h1>erreur 404</h1>";
-        console.log("erreur 404, sur ressource api:" + err);
-    }); 
+    // .catch((err) => {
+    //     document.querySelector(".titles").innerHTML = "<h1>erreur 404</h1>";
+    //     console.log("erreur 404, sur ressource api:" + err);
+    // }); 
 
 //Afficher les produits depuis le localStorage
 function displayProductsCart(kanaps) {
@@ -98,8 +98,8 @@ function displayProductsCart(kanaps) {
       "Vous n'avez pas d'article dans votre panier";
   }
   totalProduit();
-  updateProduct();
-  
+  updateQuantity();
+  deleteProduct();  
 }
 
 function totalProduit() {
@@ -123,29 +123,50 @@ function totalProduit() {
   document.getElementById("totalPrice").textContent = lisibilite_nombre(totalPrix);
 }
 
-function updateProduct() {
+
+function updateQuantity() {
   let basket = JSON.parse(localStorage.getItem('basket'))
   const quantity = document.querySelectorAll('.itemQuantity')
-    for(let updateQuantity of quantity) {
-      updateQuantity.addEventListener('change', (eq) => {
-        console.log(updateQuantity.value);
-        if(updateQuantity.value > 0){ 
-        //récupéré id et couleur via dataset
+  for(let updateQuantity of quantity) {
+    updateQuantity.addEventListener('change', (eq) => {
+      for(product of basket) {
         let article = updateQuantity.closest('article')
-        console.log(article.dataset.quantité);
-        for(product of basket) {
-        if(product._id === article.dataset.id && article.dataset.color === product.color) {
+        if (product._id === article.dataset.id && article.dataset.color === product.color && eq.target.value >= 1 && eq.target.value <= 100) {
           product.quantity = parseInt(eq.target.value);
           localStorage.basket = JSON.stringify(basket);
           article.dataset.quantité = parseInt(eq.target.value)
           totalProduit();
           diplayBasketTop()
+        } else if (eq.target.value < 1 || eq.target.value > 100) {
+          alert('Indiquez des quantités Valide SVP [comprises entre 1 et 100]');
+          updateQuantity.value = article.dataset.quantité
         }
-      }} else {
-        alert('Vous ne pouvez pas selectionné une quantité négative, veuillez choisir une nouvelle quantité')
-        let article = updateQuantity.closest('article')
-        updateQuantity.value = article.dataset.quantité
-        console.log(article.dataset.value);
+      }
+    })
+  }
+}
+
+function deleteProduct() {
+  let basket = JSON.parse(localStorage.getItem('basket'))
+  const deleteButton = document.querySelectorAll('.deleteItem')
+  for(let click of deleteButton) {
+    click.addEventListener('click', (ec) => {
+      if (window.confirm('Voulez vous supprimer cet article?')) {
+        let article = click.closest('article')
+        console.table(basket);
+        for (let i = 0, b = basket.length; i < b; i++) {
+          if (basket[i]._id === article.dataset.id && basket[i].color === article.dataset.color) {
+            article.remove();
+            console.log(article);
+            let foundProduct = basket.find(p => p._id == article.dataset.id && p.color == article.dataset.color)
+            console.log(foundProduct);
+            basket = basket.filter(p => p != foundProduct);
+            console.table(basket);
+            localStorage.basket = JSON.stringify(basket);
+          }
+          totalProduit();
+          diplayBasketTop()
+        }
       }
     })
   }
