@@ -1,10 +1,8 @@
-const currentUrl = new URL(window.location.href);
-const orderId = new URLSearchParams(currentUrl.search).get('order_id');
+// Récupération de l'orderId du produit via l' URL
+const orderId = new URL(window.location).searchParams.get("order_id");
 
-// display the order's ID in the div #orderId 
-function displayOrderId(num) {
-
-    document.getElementById('orderId').innerText = `${num}`
+// affichage du numéro de commande
+function displayOrderId(numId) {
+    document.getElementById('orderId').innerText = `${numId}`
 }
-
 displayOrderId(orderId);

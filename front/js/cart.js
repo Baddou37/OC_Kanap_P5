@@ -1,30 +1,44 @@
+/////////////////////////////////////////////
+// MAJ PANIER NAVBAR
+/////////////////////////////////////////////
+
 function diplayBasketTop() {
+    // Appel le panier depuis le localStorage
     let basket = localStorage.getItem("basket");
-    //si le panier n'est pas vide...
+    // si le panier n'est pas vide... (true)
     if (basket) {
+        // transforme le panier en format JSON en javascript
         basket = JSON.parse(basket);
+        // initialisation de la variable quantityTotal
         let quantityTotal = 0;
+        // boucle forEach pour chaque élément du panier
         basket.forEach((element) => {
+            // A chaque élément on vient ajouté la valeur de sa quantité
             quantityTotal += element.quantity;
         });
+        // on récupère la nav bar constitué de deux "li"
         let productsInBasket = document.querySelectorAll("nav a li");
-        //Affiche la quantité d'article dans le panier
+        //Affiche la quantité d'article dans le panier à droite de "panier"
         productsInBasket[1].innerHTML = `Panier (${quantityTotal})`;
     }
 }
+// appel la fonction
 diplayBasketTop();
 
 // Retourne le tableau du localStorage
 function getBasket() {
+    // variable qui stock ce que l'on appel dans le localStorage
     let basket = localStorage.getItem("basket");
-    if (basket == null) {
+    // si le panier est false (vide)
+    if (!basket) {
+        // retourne un tableau vide
         return [];
     } else {
+        // retourne le tableau stocké dans le localStorage
         return JSON.parse(basket);
     }
 }
-
-//Set the item basket into the localStorage
+// Sauvegarde le panier dans le localStorage
 function saveBasket(basket) {
     localStorage.setItem("basket", JSON.stringify(basket));
 }
@@ -65,6 +79,8 @@ function displayProductsCart(kanaps) {
                     product.alt = kanaps[g].altTxt;
                 }
             }
+
+            // insértion des éléments dans le dom
             displayProducts.insertAdjacentHTML(
                 "afterbegin",
                 `<article class="cart__item" data-id="${
@@ -97,6 +113,7 @@ function displayProductsCart(kanaps) {
       </div>
       </article>`
             );
+            // supression du style des liens ajoutés
             document.querySelector(".link-product").style.textDecoration =
                 "none";
             document.querySelector(".link-product").style.color = "white";
@@ -108,6 +125,7 @@ function displayProductsCart(kanaps) {
         document.querySelector("h1").innerHTML =
             "Vous n'avez pas d'article dans votre panier";
     }
+    //appel des différentes fonctions pour qu'elles soit dans le fetch (async)
     getBasket();
     totalProduit();
     updateQuantity();
@@ -143,6 +161,7 @@ function totalProduit() {
         lisibilite_nombre(totalPrix);
 }
 
+// fonction qui gère les changements de quantité de les inputs
 function updateQuantity() {
     let basket = JSON.parse(localStorage.getItem("basket"));
     const quantity = document.querySelectorAll(".itemQuantity");
@@ -172,6 +191,7 @@ function updateQuantity() {
     }
 }
 
+// fonction qui gère la suppremier des produits
 function deleteProduct() {
     let basket = JSON.parse(localStorage.getItem("basket"));
     const deleteButton = document.querySelectorAll(".deleteItem");
@@ -179,17 +199,16 @@ function deleteProduct() {
         click.addEventListener("click", (ec) => {
             if (window.confirm("Voulez vous supprimer cet article?")) {
                 let article = click.closest("article");
-                console.log("1", basket.length);
+                // supression de l'article dans le dom
                 article.remove();
                 for (let i = 0, b = basket.length; i < b; i++) {
-                    console.log("2", basket.length);
                     let foundProduct = basket.find(
                         (p) =>
                             p._id == article.dataset.id &&
                             p.color == article.dataset.color
                     );
+                    // filtre sur le panier, pour ne garder que les produits où l'on a pas cliqué sur supprimer
                     basket = basket.filter((p) => p != foundProduct);
-                    console.log("3", basket.length);
                     localStorage.basket = JSON.stringify(basket);
                     totalProduit();
                     diplayBasketTop();
@@ -198,6 +217,10 @@ function deleteProduct() {
         });
     }
 }
+
+/////////////////////////////////////////////
+// FONCTION SEPARATEUR DE MILIER
+/////////////////////////////////////////////
 
 function lisibilite_nombre(nbr) {
     var nombre = "" + nbr;
@@ -211,6 +234,7 @@ function lisibilite_nombre(nbr) {
     return retour;
 }
 
+
 /**************
 FORM
 ***************/
@@ -223,8 +247,6 @@ let contact = {
     city: "",
     email: "",
 };
-
-console.log(contact);
 
 // Stock si les inputs sont valides ou non
 let isValidInputs = {
@@ -275,8 +297,6 @@ for (let input of document.querySelector(".cart__order__form")) {
                 regExpList[e.target.id],
                 e.target.id
             );
-            console.log(contact);
-            console.log(isValidInputs);
         });
     }
 }
@@ -292,8 +312,6 @@ document.getElementById("order").addEventListener("click", (e) => {
     let formValidity = Object.values(isValidInputs).includes(false);
     let basket = JSON.parse(localStorage.getItem("basket"));
     getBasket();
-    console.log(basket);
-    console.log(formValidity);
     if (formValidity === true && (basket === [] || basket === null)) {
         alert(
             "Les données renseignées dans le formulaire ne sont pas valides ou ne sont pas remplies et votre panier est vide"
@@ -308,49 +326,52 @@ document.getElementById("order").addEventListener("click", (e) => {
         alert("Le panier est vide");
         return;
     } else {
-        console.log("futur fonction");
-        postOrder()
+        //appel de la fonction d'envoi de la commande
+        postOrder();
     }
 });
 
-//
-
+// Fonction d'envoi de la commande
 // initialisation d'un tableau à 0 pour stocker les ID des produits
 function postOrder() {
+    let basket = JSON.parse(localStorage.getItem("basket"));
+    let products = [];
+    // ajout de chaque id par produit dans un tableau produit
+    for (let i = 0; i < basket.length; i++) {
+        products.push(basket[i]._id);
+    }
 
-  let basket = JSON.parse(localStorage.getItem("basket"));
-  let products = [];
-  for (let i = 0; i < basket.length; i ++) {
-      products.push(basket[i]._id)
-  }
-  let data = {
-      contact,
-      products
-  };
-  if (products == []) {
-      alert('Votre panier est vide, veuillez y ajouter des produits avant de passer commande')
-      return
-  } else {
-      fetch('http://localhost:3000/api/products/order', {
-          method: 'POST',
-          headers: {
-              'Accept': 'application/json',
-              'Content-Type': "application/json"
-          },
-          body: JSON.stringify(data)
-      })
-          .then((res) => {
-              if (res.status == 201) {
-                  alert('Votre commande a bien été validée');
-                  return res.json();
-              } else if (res.status !== 201) {
-                  alert('une erreur est survenue lors de l\'envoi du formulaire, veuillez réessayer')
-              }
-          })
-          .then((res) => {
-              localStorage.clear();
-              window.location.href = `../html/confirmation.html?order_id=${res.orderId}`;
-          })
-          .catch(error => console.log('Erreur : ' + error));
-  }
+    // déclaration de data, l'object que nous envoyé lors de la commande, 
+    // avec les données du formaulaire et l'id de chaque produit.
+    let data = {
+        contact,
+        products,
+    };
+
+    // Fonction fetch avec methode post "envoi"
+    fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+        .then((res) => {
+            if (res.status == 201) {
+                alert("Votre commande a bien été validée");
+                return res.json();
+            } else if (res.status !== 201) {
+                alert(
+                    "une erreur est survenue lors de l'envoi du formulaire, veuillez réessayer"
+                );
+            }
+        })
+        .then((res) => {
+            // Vide le localStorage
+            localStorage.clear();
+            // Ouvre la page de confirmation avec le numéro de commande dans l'URL
+            window.location.href = `../html/confirmation.html?order_id=${res.orderId}`;
+        })
+        .catch((error) => console.log("Erreur : " + error));
 }
