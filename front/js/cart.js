@@ -316,17 +316,17 @@ document.getElementById("order").addEventListener("click", (e) => {
     let formValidity = Object.values(isValidInputs).includes(false);
     let basket = JSON.parse(localStorage.getItem("basket"));
     getBasket();
-    if (formValidity === true && (basket === [] || basket === null)) {
+    if ((formValidity === true) && ((basket === [] || basket === null))) {
         alert(
             "Les données renseignées dans le formulaire ne sont pas valides ou ne sont pas remplies et votre panier est vide"
         );
         return;
-    } else if (formValidity === true && basket.length != 0) {
+    } else if ((formValidity === true) && (basket.length != 0)) {
         alert(
             "Les données renseignées dans le formulaire ne sont pas valides ou ne sont pas remplies"
         );
         return;
-    } else if (formValidity === false && (basket === [] || basket === null)) {
+    } else if ((formValidity === false) && (basket === [] || basket === null)) {
         alert("Le panier est vide");
         return;
     } else {
