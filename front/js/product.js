@@ -193,4 +193,5 @@ function lisibilite_nombre(nbr) {
         count++;
     }
     return retour;
+    
 }

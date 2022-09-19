@@ -193,9 +193,14 @@ function updateQuantity() {
 
 // fonction qui gère la suppremier des produits
 function deleteProduct() {
+    //appel du panier (localStorage)
     let basket = JSON.parse(localStorage.getItem("basket"));
+    // creation variable pour stocker le boutton supprimé
     const deleteButton = document.querySelectorAll(".deleteItem");
+    console.log(typeof deleteButton);
+    // Pour chaque click sur un bouton delete
     for (let click of deleteButton) {
+        // Ecoute du clique sur un bouton supprimé
         click.addEventListener("click", (ec) => {
             if (window.confirm("Voulez vous supprimer cet article?")) {
                 let article = click.closest("article");
@@ -233,7 +238,6 @@ function lisibilite_nombre(nbr) {
     }
     return retour;
 }
-
 
 /**************
 FORM
@@ -341,7 +345,7 @@ function postOrder() {
         products.push(basket[i]._id);
     }
 
-    // déclaration de data, l'object que nous envoyé lors de la commande, 
+    // déclaration de data, l'object que nous envoyé lors de la commande,
     // avec les données du formaulaire et l'id de chaque produit.
     let data = {
         contact,
