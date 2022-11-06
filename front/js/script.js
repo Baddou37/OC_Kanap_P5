@@ -60,7 +60,7 @@ function kanapData(objetProduits) {
         // utilisation de insertAdjacentHTML pour créer du nouveau contenu HTML par produit dans l'API
         displayProducts.insertAdjacentHTML(
             "afterbegin",
-            `<a href="./product.html?id=${product._id}">
+            `<a href="./html/product.html?id=${product._id}">
         <article>
           <img src="${product.imageUrl}" alt="${product.altTxt}">
           <h3 class="productName">${product.name}</h3>
