@@ -44,7 +44,7 @@ function saveBasket(basket) {
 }
 
 //appel de l'api avec méthode fetch
-fetch("http://localhost:3000/api/products")
+fetch("https://kanap-back.vercel.app//api/products")
     // transformer la réponse en json.
     .then((res) => {
         if (res.ok) {
@@ -353,7 +353,7 @@ function postOrder() {
     };
 
     // Fonction fetch avec methode post "envoi"
-    fetch("http://localhost:3000/api/products/order", {
+    fetch("https://kanap-back.vercel.app//api/products/order", {
         method: "POST",
         headers: {
             Accept: "application/json",
