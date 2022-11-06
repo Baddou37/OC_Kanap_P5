@@ -26,7 +26,7 @@ if (basket) {
 /////////////////////////////////////////////
 
 //appel de l'api avec méthode fetch
-fetch("https://kanap-back.vercel.app//api/products")
+fetch("https://kanap-back.vercel.app/api/products")
     // transformer la réponse en json.
     .then((res) => {
         if (res.ok) {

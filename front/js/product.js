@@ -33,7 +33,7 @@ diplayBasketTop();
 const id = new URL(window.location).searchParams.get("id");
 
 // Récupération du produit dans l'api et traitement des données (voir script.js)
-fetch(`https://kanap-back.vercel.app//api/products/${id}`)
+fetch(`https://kanap-back.vercel.app/api/products/${id}`)
     // transformer la réponse en json.
     .then((res) => {
         if (res.ok) {
